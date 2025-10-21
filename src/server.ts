@@ -1,26 +1,32 @@
-import express, {Request , Response} from 'express';
+import express, { Application } from 'express';
+import mainRouter from './Routes';
 
-const app = express();
+class Server {
+  private static instance: Server;
+  public app: Application;
 
-app.get('/', (req: Request, res: Response) => {
-  res.status(200).send(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <title>Express Server</title>
-    </head>
-    <body>
-      <h1>Welcome to the Express Server!</h1>
-      <a href="/ping">Ping</a>
-    </body>
-    </html>
-  `);
-});
+  private constructor() {
+    this.app = express();
+    this.routes();
+  }
 
-app.get('/ping', (req : Request, res : Response) => {
-  res.status(200).send('pong');
-});
+  public static getInstance(): Server {
+    if (!Server.instance) {
+      Server.instance = new Server();
+    }
+    return Server.instance;
+  }
 
-export default app;
+  private routes(): void {
+    // Use the main router for all incoming requests
+    this.app.use('/', mainRouter);
+  }
 
+  public start(port: number): void {
+    this.app.listen(port, () => {
+      console.log(`Server is running on http://localhost:${port}`);
+    });
+  }
+}
+
+export default Server.getInstance();
