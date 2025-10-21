@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import pingRouter from './ping';
-
+import stockRouter from './stock.routes';
 const router = Router();
 
 // Home page route
@@ -23,5 +23,8 @@ router.get('/', (req: Request, res: Response) => {
 
 // Mount the ping router
 router.use('/ping', pingRouter);
+
+// Mount Stock routes
+router.use('/api/stocks', stockRouter);
 
 export default router;

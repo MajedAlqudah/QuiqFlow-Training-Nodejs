@@ -1,5 +1,5 @@
 import express, { Application } from 'express';
-import mainRouter from './Routes';
+import mainRouter from './routes';
 
 class Server {
   private static instance: Server;
@@ -7,6 +7,7 @@ class Server {
 
   private constructor() {
     this.app = express();
+    this.config();
     this.routes();
   }
 
@@ -17,8 +18,11 @@ class Server {
     return Server.instance;
   }
 
+  private config(): void {
+    this.app.use(express.json());
+  }
+
   private routes(): void {
-    // Use the main router for all incoming requests
     this.app.use('/', mainRouter);
   }
 
